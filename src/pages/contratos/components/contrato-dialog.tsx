@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button.tsx"
 import { Checkbox } from "@/components/ui/checkbox.tsx"
@@ -33,6 +34,11 @@ export const ContratoDialog = ({
   onSubmit,
   isLoading,
 }: ContratoDialogProps) => {
+  const [displayedContrato, setDisplayedContrato] = useState(contrato)
+  if (open && contrato && contrato !== displayedContrato) {
+    setDisplayedContrato(contrato)
+  }
+
   const {
     register,
     handleSubmit,
@@ -42,15 +48,15 @@ export const ContratoDialog = ({
     watch,
   } = useForm<ContratoFormData>({
     resolver: zodResolver(contratoFormSchema),
-    values: contrato
+    values: displayedContrato
       ? {
-          empresaId: contrato.empresaId,
-          numero: contrato.numero,
-          descricao: contrato.descricao,
-          dataInicio: contrato.dataInicio,
-          dataFim: contrato.dataFim,
-          valor: contrato.valor,
-          ativo: contrato.ativo,
+          empresaId: displayedContrato.empresaId,
+          numero: displayedContrato.numero,
+          descricao: displayedContrato.descricao,
+          dataInicio: displayedContrato.dataInicio,
+          dataFim: displayedContrato.dataFim,
+          valor: displayedContrato.valor,
+          ativo: displayedContrato.ativo,
         }
       : {
           empresaId,
@@ -75,7 +81,7 @@ export const ContratoDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {contrato ? "Editar Contrato" : "Novo Contrato"}
+            {displayedContrato ? "Editar Contrato" : "Novo Contrato"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">

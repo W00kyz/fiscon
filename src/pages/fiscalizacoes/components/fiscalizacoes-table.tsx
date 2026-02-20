@@ -148,7 +148,7 @@ export const FiscalizacoesTable = ({
     {
       accessorKey: "fiscalizadorNome",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Fiscalizador" />
+        <DataTableColumnHeader column={column} title="Fiscal" />
       ),
       cell: ({ row }) => {
         const fisc = row.original
@@ -157,7 +157,7 @@ export const FiscalizacoesTable = ({
           return (
             <button
               type="button"
-              className="text-sm text-muted-foreground underline decoration-dashed hover:text-primary"
+              className="cursor-pointer text-sm text-muted-foreground underline decoration-dashed hover:text-primary"
               onClick={(e) => {
                 e.stopPropagation()
                 handleSelfAssign(fisc.id)

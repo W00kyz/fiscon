@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button.tsx"
 import { Checkbox } from "@/components/ui/checkbox.tsx"
@@ -38,6 +39,11 @@ export const UsuarioDialog = ({
   onSubmit,
   isLoading,
 }: UsuarioDialogProps) => {
+  const [displayedUsuario, setDisplayedUsuario] = useState(usuario)
+  if (open && usuario && usuario !== displayedUsuario) {
+    setDisplayedUsuario(usuario)
+  }
+
   const {
     register,
     handleSubmit,
@@ -47,12 +53,12 @@ export const UsuarioDialog = ({
     watch,
   } = useForm<UsuarioFormData>({
     resolver: zodResolver(usuarioFormSchema),
-    values: usuario
+    values: displayedUsuario
       ? {
-          nome: usuario.nome,
-          email: usuario.email,
-          role: usuario.role,
-          ativo: usuario.ativo,
+          nome: displayedUsuario.nome,
+          email: displayedUsuario.email,
+          role: displayedUsuario.role,
+          ativo: displayedUsuario.ativo,
         }
       : { nome: "", email: "", role: "fiscal", ativo: true },
   })
@@ -69,7 +75,7 @@ export const UsuarioDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {usuario ? "Editar Usuário" : "Novo Usuário"}
+            {displayedUsuario ? "Editar Usuário" : "Novo Usuário"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">

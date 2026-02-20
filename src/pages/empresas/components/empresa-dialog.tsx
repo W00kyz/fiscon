@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button.tsx"
 import {
@@ -30,6 +31,11 @@ export const EmpresaDialog = ({
   onSubmit,
   isLoading,
 }: EmpresaDialogProps) => {
+  const [displayedEmpresa, setDisplayedEmpresa] = useState(empresa)
+  if (open && empresa && empresa !== displayedEmpresa) {
+    setDisplayedEmpresa(empresa)
+  }
+
   const {
     register,
     handleSubmit,
@@ -37,13 +43,13 @@ export const EmpresaDialog = ({
     reset,
   } = useForm<EmpresaFormData>({
     resolver: zodResolver(empresaFormSchema),
-    values: empresa
+    values: displayedEmpresa
       ? {
-          nome: empresa.nome,
-          cnpj: empresa.cnpj,
-          endereco: empresa.endereco,
-          telefone: empresa.telefone,
-          email: empresa.email,
+          nome: displayedEmpresa.nome,
+          cnpj: displayedEmpresa.cnpj,
+          endereco: displayedEmpresa.endereco,
+          telefone: displayedEmpresa.telefone,
+          email: displayedEmpresa.email,
         }
       : undefined,
   })
@@ -58,7 +64,7 @@ export const EmpresaDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {empresa ? "Editar Empresa" : "Nova Empresa"}
+            {displayedEmpresa ? "Editar Empresa" : "Nova Empresa"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
